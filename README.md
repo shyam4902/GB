@@ -16,7 +16,3 @@ This repository contains R Markdown files for analyzing fantasy football contest
 - Analyzes historical contest results.
 - Estimates how many points were needed to reach different payout tiers.
 - Currently includes past data and a small sample set but was still extremely accurate in making predictions.
-
-### Next Steps:
-- Upload additional supporting files.
-- Add visuals or graphs where relevant.
