@@ -1,0 +1,115 @@
+"Player","position","multiplier","salary","status","game_window","SOS","Floor","Consensus","Proj.","Ceiling","3D Proj.","GB_Projection","GB_Projection_Floor","GB_Projection_Ceiling"
+"Sam Darnold","QB",1.3,8450,"Active","Sunday Morning","-13%",14.5,17.2,17.4,20.9,17.5,22.75,18.85,27.17
+"Russell Wilson","QB",1.2,6840,"Active","Wednesday","-6%",15.9,14.7,15.9,15.9,15.9,19.08,19.08,19.08
+"C.J. Stroud","QB",1,6000,"Active","Wednesday","8%",13.7,15.3,16.2,18.4,16.1,16.1,13.7,18.4
+"Russell Wilson","QB",1.2,6840,"Active","Wednesday","-6%",15.9,14.7,15.9,15.9,15.9,19.08,19.08,19.08
+"Michael Penix Jr.","QB",1.1,4950,"Active","Sunday Night","-5%",14.6,14.9,15.2,22,16.4,18.04,16.06,24.2
+"Lamar Jackson","QB",1.1,9020,"Active","Wednesday","-1%",17.7,21,20.1,24.4,20.5,22.55,19.47,26.84
+"Jameis Winston","QB",1.4,7419,"Active","Sunday Afternoon","-19%",2.3,0.2,2.5,3,2.6,3.64,3.22,4.2
+"Sam Darnold","QB",1.3,8450,"Active","Sunday Morning","-13%",14.5,17.2,17.4,20.9,17.5,22.75,18.85,27.17
+"Jayden Daniels","QB",1.3,9490,"Active","Sunday Night","14%",15.6,19,19.1,22.9,19.1,24.83,20.28,29.77
+"Jordan Love","QB",1,6200,"Active","Sunday Morning","-5%",14.2,18.4,16.5,21.6,17.1,17.1,14.2,21.6
+"Brock Purdy","QB",1.1,6930,"Active","Monday Night","1%",15.9,17.2,18.3,19.8,18.1,19.91,17.49,21.78
+"Jameis Winston","QB",1.2,6360,"Active","Sunday Afternoon","-19%",2.3,0.2,2.5,3,2.6,3.12,2.76,3.6
+"Anthony Richardson","QB",1.2,6480,"Active","Sunday Morning","-1%",12.7,17.4,17.3,20.8,17.1,20.52,15.24,24.96
+"Kyler Murray","QB",1.3,7930,"Active","Saturday","3%",15.7,19.3,17.2,21.5,17.8,23.14,20.41,27.95
+"Joe Burrow","QB",1.1,8250,"Active","Saturday","-9%",16.9,20.8,19.9,23.3,20,22,18.59,25.63
+"Drew Lock","QB",1,4900,"Active","Sunday Morning","3%",13.1,14.5,13.1,13.1,13.1,13.1,13.1,13.1
+"Jalen Hurts","QB",1.1,8580,"Active","Sunday Afternoon","14%",16.9,20.6,20.1,23.4,20.1,22.11,18.59,25.74
+"Dak Prescott","QB",1.2,4800,"Injured Reserve","Sunday Afternoon",NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Kyler Murray","QB",1.5,9150,"Active","Saturday","3%",15.7,19.3,17.2,21.5,17.8,26.7,23.55,32.25
+"Jayden Daniels","QB",1.1,8030,"Active","Sunday Night","14%",15.6,19,19.1,22.9,19.1,21.01,17.16,25.19
+"Lamar Jackson","QB",1.2,9840,"Active","Wednesday","-1%",17.7,21,20.1,24.4,20.5,24.6,21.24,29.28
+"Caleb Williams","QB",1.4,7699,"Active","Thursday","-1%",14.4,16.4,16.1,21.7,16.9,23.66,20.16,30.38
+"Derrick Henry","RB",1.4,11200,"Active","Wednesday","-15%",12.2,16.6,16.2,22.2,16.6,23.24,17.08,31.08
+"Bucky Irving","RB",1.1,7040,"Active","Sunday Morning","31%",9.3,14.7,11.5,22.5,13.3,14.63,10.23,24.75
+"Alvin Kamara","RB",1.3,9490,"Active","Sunday Morning","7%",8.4,2.3,12.2,14.5,11.9,15.47,10.92,18.85
+"Rico Dowdle","RB",1.3,8190,"Active","Sunday Afternoon","-23%",9.1,14.4,12.2,18.8,12.9,16.77,11.83,24.44
+"Jaylen Warren","RB",1.3,6760,"Active","Wednesday","-34%",7.6,9.3,9.9,16.1,10.7,13.91,9.88,20.93
+"Antonio Gibson","RB",1.4,7419,"Active","Saturday","-9%",5.9,4.7,7.1,10.7,7.6,10.64,8.26,14.98
+"J.K. Dobbins","RB",1.4,8119,"Injured Reserve","Saturday",NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Chuba Hubbard","RB",1.2,8160,"Active","Sunday Morning","-9%",9.5,15.8,13.2,17.5,13.3,15.96,11.4,21
+"Jahmyr Gibbs","RB",1.2,9000,"Active","Monday Night","4%",12,22.3,18.2,24.2,18.1,21.72,14.4,29.04
+"Jonathan Taylor","RB",1.3,8970,"Active","Sunday Morning","13%",10.5,15.5,15.7,20.7,15.6,20.28,13.65,26.91
+"D'Andre Swift","RB",1.2,6720,"Active","Thursday","3%",8.7,12.7,11.8,15,11.8,14.16,10.44,18
+"Breece Hall","RB",1,6100,"Active","Sunday Morning","28%",6.9,14.5,12.6,15.1,12,12,6.9,15.1
+"Kenneth Gainwell","RB",1.1,5280,"Active","Sunday Afternoon","2%",3.7,4.7,4.2,6.9,4.7,5.17,4.07,7.59
+"D'Andre Swift","RB",1.4,7839,"Active","Thursday","3%",8.7,12.7,11.8,15,11.8,16.52,12.18,21
+"Chase Brown","RB",1.2,9240,"Active","Saturday","-2%",12.6,19.7,15.3,18.4,15.4,18.48,15.12,22.08
+"Chuba Hubbard","RB",1.2,8160,"Active","Sunday Morning","-9%",9.5,15.8,13.2,17.5,13.3,15.96,11.4,21
+"Brian Robinson Jr.","RB",1,6200,"Active","Sunday Night","-11%",9.9,13.1,13.1,19.7,13.8,13.8,9.9,19.7
+"Joe Mixon","RB",1.4,10920,"Active","Wednesday","-8%",8.1,16.7,14.2,18.4,13.8,19.32,11.34,25.76
+"Tony Pollard","RB",1,6600,"Active","Sunday Morning","19%",10.2,12.3,12.4,17.1,12.9,12.9,10.2,17.1
+"James Conner","RB",1.1,7810,"Active","Saturday","-6%",11.9,19.1,13.7,18.3,14.3,15.73,13.09,20.13
+"Kimani Vidal","RB",1.1,5280,"Active","Saturday","8%",4.6,7,5.8,16.2,7.6,8.36,5.06,17.82
+"David Montgomery","RB",1.5,9750,"Active","Monday Night",NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Zach Charbonnet","RB",1.2,7200,"Active","Thursday","13%",7.9,7.3,9.5,17.1,10.7,12.84,9.48,20.52
+"De'Von Achane","RB",1,7400,"Active","Sunday Afternoon","-11%",8.8,18.8,13.9,20.6,14.2,14.2,8.8,20.6
+"Joe Mixon","RB",1,7800,"Active","Wednesday","-8%",8.1,16.7,14.2,18.4,13.8,13.8,8.1,18.4
+"Kenneth Walker III","RB",1,6300,"Active","Thursday","13%",9,13.6,12.6,15.1,12.4,12.4,9,15.1
+"Chuba Hubbard","RB",1.2,8160,"Active","Sunday Morning","-9%",9.5,15.8,13.2,17.5,13.3,15.96,11.4,21
+"Gus Edwards","RB",1.3,6630,"Active","Saturday","8%",7.2,7.6,8.2,13.2,9,11.7,9.36,17.16
+"Derrick Henry","RB",1.3,10400,"Active","Wednesday","-15%",12.2,16.6,16.2,22.2,16.6,21.58,15.86,28.86
+"Brian Robinson Jr.","RB",1,6200,"Active","Sunday Night","-11%",9.9,13.1,13.1,19.7,13.8,13.8,9.9,19.7
+"Josh Jacobs","RB",1.1,8360,"Active","Sunday Morning","-22%",12.3,19.3,17.1,21.7,17,18.7,13.53,23.87
+"Josh Jacobs","RB",1.1,8360,"Active","Sunday Morning","-22%",12.3,19.3,17.1,21.7,17,18.7,13.53,23.87
+"Antonio Gibson","RB",1.4,7419,"Active","Saturday","-9%",5.9,4.7,7.1,10.7,7.6,10.64,8.26,14.98
+"Tyler Allgeier","RB",1.3,7150,"Active","Sunday Night","-3%",6.7,6.1,7.7,16.1,9.2,11.96,8.71,20.93
+"Chuba Hubbard","RB",1,6800,"Active","Sunday Morning","-9%",9.5,15.8,13.2,17.5,13.3,13.3,9.5,17.5
+"D'Andre Swift","RB",1.5,8400,"Active","Thursday","3%",8.7,12.7,11.8,15,11.8,17.7,13.05,22.5
+"Zach Charbonnet","RB",1.4,8400,"Active","Thursday","13%",7.9,7.3,9.5,17.1,10.7,14.98,11.06,23.94
+"De'Von Achane","RB",1.1,8140,"Active","Sunday Afternoon","-11%",8.8,18.8,13.9,20.6,14.2,15.62,9.68,22.66
+"Bucky Irving","RB",1.4,8960,"Active","Sunday Morning","31%",9.3,14.7,11.5,22.5,13.3,18.62,13.02,31.5
+"Terry McLaurin","WR",1,7300,"Active","Sunday Night","20%",9.8,14.8,14.6,19.7,14.6,14.6,9.8,19.7
+"Xavier Worthy","WR",1.3,6500,"Active","Wednesday","-10%",8,11.1,11.5,18.8,12.3,15.99,10.4,24.44
+"Jameson Williams","WR",1.1,6050,"Active","Monday Night","-16%",9,11.3,12.1,15.6,12.2,13.42,9.9,17.16
+"Calvin Ridley","WR",1.3,7410,"Active","Sunday Morning","19%",8.4,12.9,12.8,18.9,13.1,17.03,10.92,24.57
+"Rashod Bateman","WR",1.3,6370,"Active","Wednesday","9%",7.2,8.6,8.5,15.7,9.7,12.61,9.36,20.41
+"Tee Higgins","WR",1.3,8840,"Active","Saturday","-7%",9.3,15.9,14.7,19.4,14.6,18.98,12.09,25.22
+"JuJu Smith-Schuster","WR",1.3,4680,"Active","Wednesday","-10%",5.3,3.4,7.6,10.6,7.7,10.01,6.89,13.78
+"Ladd McConkey","WR",1.1,7040,"Active","Saturday","-3%",9.7,14.6,13.2,22.7,14.4,15.84,10.67,24.97
+"Puka Nacua","WR",1.3,10400,"Active","Saturday","-12%",11.6,20.1,17.5,24.3,17.7,23.01,15.08,31.59
+"Amon-Ra St. Brown","WR",1,7900,"Active","Monday Night","-16%",10.8,17.5,15.4,19.3,15.3,15.3,10.8,19.3
+"Mike Evans","WR",1.1,8360,"Active","Sunday Morning","-2%",9.6,17,14.8,20.5,14.9,16.39,10.56,22.55
+"Joshua Palmer","WR",1.1,4840,"Active","Saturday","-3%",6.3,8.1,7.8,12.7,8.5,9.35,6.93,13.97
+"Jakobi Meyers","WR",1.1,6380,"Active","Sunday Morning","4%",9.5,14.3,12.7,20.3,13.6,14.96,10.45,22.33
+"Mike Evans","WR",1.1,8360,"Active","Sunday Morning","-2%",9.6,17,14.8,20.5,14.9,16.39,10.56,22.55
+"Courtland Sutton","WR",1,6500,"Active","Saturday","11%",11.8,15.7,15.9,25.2,16.9,16.9,11.8,25.2
+"Davante Adams","WR",1.2,8520,"Active","Sunday Morning","3%",10.5,17.2,15.2,19.6,15.2,18.24,12.6,23.52
+"Amon-Ra St. Brown","WR",1.1,8690,"Active","Monday Night","-16%",10.8,17.5,15.4,19.3,15.3,16.83,11.88,21.23
+"DeAndre Hopkins","WR",1.5,7950,"Active","Wednesday","-10%",8.3,11.1,11.8,18.7,12.5,18.75,12.45,28.05
+"Ladd McConkey","WR",1.1,7040,"Active","Saturday","-3%",9.7,14.6,13.2,22.7,14.4,15.84,10.67,24.97
+"Jameson Williams","WR",1.5,8250,"Active","Monday Night","-16%",9,11.3,12.1,15.6,12.2,18.3,13.5,23.4
+"DJ Moore","WR",1.1,6270,"Active","Thursday","1%",9.2,14.2,13.2,18.1,13.4,14.74,10.12,19.91
+"Darnell Mooney","WR",1.5,8100,"Active","Sunday Night","-1%",9.9,10.7,12.7,16.8,12.9,19.35,14.85,25.2
+"Adam Thielen","WR",1.1,6160,"Active","Sunday Morning","12%",9.6,13,11.9,20,13.1,14.41,10.56,22
+"K.J. Osborn","WR",1.1,3520,"Active","Sunday Night",NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Ricky Pearsall","WR",1,4300,"Active","Monday Night","4%",8,4.8,8.9,16,10.1,10.1,8,16
+"Josh Downs","WR",1.2,5880,"Active","Sunday Morning","-9%",10.9,11,11.9,16.4,12.6,15.12,13.08,19.68
+"Jayden Reed","WR",1,6000,"Active","Sunday Morning","22%",8.6,11.6,12.3,16,12.3,12.3,8.6,16
+"Jayden Reed","WR",1.3,7800,"Active","Sunday Morning","22%",8.6,11.6,12.3,16,12.3,15.99,11.18,20.8
+"Zay Flowers","WR",1.4,8260,"Active","Wednesday","9%",8.5,13.7,12.8,17.9,13,18.2,11.9,25.06
+"Tyler Boyd","WR",1.1,4070,"Active","Sunday Morning","19%",4.5,5.2,5.8,8.4,6.1,6.71,4.95,9.24
+"Quentin Johnston","WR",1.1,5830,"Active","Saturday","-3%",8.1,9.6,10.8,20.5,12.2,13.42,8.91,22.55
+"Ladd McConkey","WR",1,6400,"Active","Saturday","-3%",9.7,14.6,13.2,22.7,14.4,14.4,9.7,22.7
+"Adam Thielen","WR",1,5600,"Active","Sunday Morning","12%",9.6,13,11.9,20,13.1,13.1,9.6,20
+"Keenan Allen","WR",1.2,6360,"Active","Thursday","1%",9.1,13.1,12.8,19.9,13.5,16.2,10.92,23.88
+"Cooper Kupp","WR",1.1,7150,"Active","Saturday","-12%",8.1,14.9,14.4,19.9,14.3,15.73,8.91,21.89
+"Zach Ertz","TE",1.4,5320,"Active","Sunday Night","-9%",6.8,8.3,8.4,16.9,9.8,13.72,9.52,23.66
+"David Njoku","TE",1.3,6760,"Active","Sunday Afternoon","1%",6.4,10.1,10.7,18.5,11.4,14.82,8.32,24.05
+"Hunter Henry","TE",1.3,5330,"Active","Saturday","-33%",7.3,10.1,9.1,17.6,10.4,13.52,9.49,22.88
+"Dalton Schultz","TE",1.2,4080,"Active","Wednesday","-2%",5.5,8.3,7.6,14.4,8.5,10.2,6.6,17.28
+"Will Dissly","TE",1.2,4440,"Active","Saturday","17%",7.4,NA,8.7,15.7,9.8,11.76,8.88,18.84
+"Pat Freiermuth","TE",1.1,4290,"Active","Wednesday","19%",5.9,9.4,8.6,14.4,9.2,10.12,6.49,15.84
+"Brock Bowers","TE",1,6500,"Active","Sunday Morning","5%",9.8,14.9,13.9,20.9,14.5,14.5,9.8,20.9
+"Jonnu Smith","TE",1,5500,"Active","Sunday Afternoon","3%",9.2,13.1,11.5,25.4,13.8,13.8,9.2,25.4
+"David Njoku","TE",1,5200,"Active","Sunday Afternoon","1%",6.4,10.1,10.7,18.5,11.4,11.4,6.4,18.5
+"Trey McBride","TE",1.3,8060,"Active","Saturday","-5%",10.7,15.2,16.5,23.8,16.8,21.84,13.91,30.94
+"Hunter Henry","TE",1.3,5330,"Active","Saturday","-33%",7.3,10.1,9.1,17.6,10.4,13.52,9.49,22.88
+"Travis Kelce","TE",1.1,6160,"Active","Wednesday","2%",7.8,13,14.4,20.5,14.3,15.73,8.58,22.55
+"T.J. Hockenson","TE",1,4800,"Active","Sunday Morning","19%",9.5,10.4,10.8,13.6,11.1,11.1,9.5,13.6
+"George Kittle","TE",1.3,7800,"Active","Monday Night","-26%",8.5,14.4,13.4,22.8,14.3,18.59,11.05,29.64
+"Jonnu Smith","TE",1.1,6050,"Active","Sunday Afternoon","3%",9.2,13.1,11.5,25.4,13.8,15.18,10.12,27.94
+"Foster Moreau","TE",1.3,3900,"Active","Sunday Morning","21%",4.5,5.5,5.2,13.3,6.7,8.71,5.85,17.29
+"Noah Fant","TE",1.3,4680,"Active","Thursday","10%",4.7,6.6,6.3,12.6,7.3,9.49,6.11,16.38
+"Mark Andrews","TE",1,4300,"Active","Wednesday","-6%",6.6,9.8,9.6,20.6,11.2,11.2,6.6,20.6
