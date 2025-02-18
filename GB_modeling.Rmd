@@ -1,0 +1,294 @@
+---
+title: "GB_modeling"
+author: "Shyam Patel"
+date: "12/7/2024"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+
+```
+
+```{r}
+# Spark Contest Data
+spark_data <- data.frame(
+  Week = c(11, 12, 13),
+  ContestType = rep("Spark", 3),
+  Top200 = c(66.41, 61, 54.4),
+  Top100 = c(81, 82.3, 72.4),
+  Top50 = c(103, 97.5, 95.9),
+  Top10 = c(117, 119.3, 111.8)
+)
+
+# Scorcher Contest Data
+scorcher_data <- data.frame(
+  Week = c(8, 10, 11, 13),
+  ContestType = rep("Scorcher", 4),
+  Top200 = c(104.82, 88.87, 102.29, 99.93),
+  Top100 = c(114.5, 99.04, 118.21, 112.66),
+  Top75 = c(120, 103.58, 123.62, 120),
+  Top50 = c(122.65, 109.45, 130.13, 126),
+  Top20 = c(131.29, 130.52, 141.45, 140.7),
+  Top10 = c(135.8, 144.12, 150.66, 153.5)
+)
+
+# Wildfire Contest Data
+wildfire_data <- data.frame(
+  Week = c(11, 12, 13),
+  ContestType = rep("Wildfire", 3),
+  Top312 = c(123, 123, 122.1),
+  Top200 = c(134.8, 134.75, 131),
+  Top100 = c(149, 147.6, 141.2),
+  Top50 = c(163.7, 158.4, 151),
+  Top20 = c(177.7, 175.5, 159.8),
+  Top7 = c(190.9, 183.8, 178.75)
+)
+
+# Inferno Contest Data
+inferno_data <- data.frame(
+  Week = c(10, 13),
+  ContestType = rep("Inferno", 2),
+  Top400 = c(146, 167.5),
+  Top200 = c(168, 183),
+  Top100 = c(193, 196.4),
+  Top50 = c(212.5, 209.5),
+  Top20 = c(232.8, 224),
+  Top10 = c(246.6, 237)
+)
+
+```
+
+
+```{r}
+print("Spark Contest Data:")
+summary(spark_data)
+
+print("Scorcher Contest Data:")
+summary(scorcher_data)
+
+print("Wildfire Contest Data:")
+summary(wildfire_data)
+
+print("Inferno Contest Data:")
+summary(inferno_data)
+```
+
+
+# Spark Lineup Analysis
+
+In this section, we analyze the Spark lineup, focusing on the points required to hit various payout thresholds. We include predictions for the required points, along with confidence intervals derived using Bayesian analysis.
+
+```{r spark-analysis, message=FALSE, warning=FALSE}
+# Load necessary libraries
+library(brms)
+library(dplyr)
+library(knitr)
+
+# Step 2: Fit Bayesian Regression Model for Each Tier
+bayesian_models <- list(
+  Top200 = brm(Top200 ~ Week, data = spark_data, family = gaussian(),
+               prior = c(prior(normal(60, 10), class = "Intercept"),
+                         prior(normal(0, 2), class = "b"),
+                         prior(cauchy(0, 2), class = "sigma")),
+               iter = 2000, chains = 4),
+  Top100 = brm(Top100 ~ Week, data = spark_data, family = gaussian(),
+               prior = c(prior(normal(80, 10), class = "Intercept"),
+                         prior(normal(0, 2), class = "b"),
+                         prior(cauchy(0, 2), class = "sigma")),
+               iter = 2000, chains = 4),
+  Top50 = brm(Top50 ~ Week, data = spark_data, family = gaussian(),
+              prior = c(prior(normal(100, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4),
+  Top10 = brm(Top10 ~ Week, data = spark_data, family = gaussian(),
+              prior = c(prior(normal(120, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4)
+)
+
+# Step 3: Extract Predictions and Confidence Intervals
+predictions <- lapply(bayesian_models, function(model) {
+  fitted_values <- fitted(model, summary = TRUE)
+  data.frame(
+    Prediction = fitted_values[, "Estimate"],
+    Lower = fitted_values[, "Q2.5"],
+    Upper = fitted_values[, "Q97.5"]
+  )
+})
+
+
+# Combine Predictions into a Table
+spark_results <- data.frame(
+  Prediction = sapply(predictions, function(x) x$Prediction[1]),
+  Lower = sapply(predictions, function(x) x$Lower[1]),
+  Upper = sapply(predictions, function(x) x$Upper[1])
+)
+
+spark_results <- spark_results %>%
+  mutate(
+    Prediction = round(Prediction, 2),
+    Lower = round(Lower, 2),
+    Upper = round(Upper, 2)
+  )
+
+# Step 4: Display Results as a Table
+kable(
+  spark_results,
+  caption = "Points Required for Spark Lineup Payouts with Confidence Intervals",
+  col.names = c("Payout Tier", "Estimated Points", "Lower Bound", "Upper Bound")
+)
+
+spark_results %>%
+  kbl(caption = "Spark Lineup - Points Thresholds with Confidence Intervals") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
+  column_spec(2, bold = TRUE) # Optionally bold the interval columns
+
+```
+
+# Scorcher Contest Analysis
+
+```{r}
+
+# Step 1: Define Bayesian Models for Each Tier
+bayesian_models_scorcher <- list(
+  Top200 = brm(Top200 ~ Week, data = scorcher_data, family = gaussian(),
+               prior = c(prior(normal(100, 10), class = "Intercept"),
+                         prior(normal(0, 2), class = "b"),
+                         prior(cauchy(0, 2), class = "sigma")),
+               iter = 2000, chains = 4),
+  Top100 = brm(Top100 ~ Week, data = scorcher_data, family = gaussian(),
+               prior = c(prior(normal(110, 10), class = "Intercept"),
+                         prior(normal(0, 2), class = "b"),
+                         prior(cauchy(0, 2), class = "sigma")),
+               iter = 2000, chains = 4),
+  Top75 = brm(Top75 ~ Week, data = scorcher_data, family = gaussian(),
+              prior = c(prior(normal(120, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4),
+  Top50 = brm(Top50 ~ Week, data = scorcher_data, family = gaussian(),
+              prior = c(prior(normal(130, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4),
+  Top20 = brm(Top20 ~ Week, data = scorcher_data, family = gaussian(),
+              prior = c(prior(normal(140, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4),
+  Top10 = brm(Top10 ~ Week, data = scorcher_data, family = gaussian(),
+              prior = c(prior(normal(150, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4)
+)
+
+# Step 2: Extract Predictions and Confidence Intervals
+predictions_scorcher <- lapply(bayesian_models_scorcher, function(model) {
+  fitted_values <- fitted(model, summary = TRUE)
+  data.frame(
+    Prediction = fitted_values[, "Estimate"],
+    Lower = fitted_values[, "Q2.5"],
+    Upper = fitted_values[, "Q97.5"]
+  )
+})
+
+# Combine Predictions into a Table
+scorcher_results <- data.frame(
+  Prediction = sapply(predictions_scorcher, function(x) x$Prediction[1]),
+  Lower = sapply(predictions_scorcher, function(x) x$Lower[1]),
+  Upper = sapply(predictions_scorcher, function(x) x$Upper[1])
+)
+
+scorcher_results <- scorcher_results %>%
+  mutate(
+    Prediction = round(Prediction, 2),
+    Lower = round(Lower, 2),
+    Upper = round(Upper, 2)
+  )
+
+# Step 3: Display Results as a Table
+library(kableExtra)
+
+scorcher_results %>%
+  kbl(caption = "Scorcher Lineup - Points Thresholds with Confidence Intervals") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
+  column_spec(2, bold = TRUE) # Optionally bold the interval columns
+
+```
+
+```{r}
+# Step 1: Define Bayesian Models for Each Tier
+bayesian_models_wildfire <- list(
+  Top312 = brm(Top312 ~ Week, data = wildfire_data, family = gaussian(),
+               prior = c(prior(normal(120, 10), class = "Intercept"),
+                         prior(normal(0, 2), class = "b"),
+                         prior(cauchy(0, 2), class = "sigma")),
+               iter = 2000, chains = 4),
+  Top200 = brm(Top200 ~ Week, data = wildfire_data, family = gaussian(),
+               prior = c(prior(normal(130, 10), class = "Intercept"),
+                         prior(normal(0, 2), class = "b"),
+                         prior(cauchy(0, 2), class = "sigma")),
+               iter = 2000, chains = 4),
+  Top100 = brm(Top100 ~ Week, data = wildfire_data, family = gaussian(),
+               prior = c(prior(normal(150, 10), class = "Intercept"),
+                         prior(normal(0, 2), class = "b"),
+                         prior(cauchy(0, 2), class = "sigma")),
+               iter = 2000, chains = 4),
+  Top50 = brm(Top50 ~ Week, data = wildfire_data, family = gaussian(),
+              prior = c(prior(normal(160, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4),
+  Top20 = brm(Top20 ~ Week, data = wildfire_data, family = gaussian(),
+              prior = c(prior(normal(180, 10), class = "Intercept"),
+                        prior(normal(0, 2), class = "b"),
+                        prior(cauchy(0, 2), class = "sigma")),
+              iter = 2000, chains = 4),
+  Top7 = brm(Top7 ~ Week, data = wildfire_data, family = gaussian(),
+             prior = c(prior(normal(190, 10), class = "Intercept"),
+                       prior(normal(0, 2), class = "b"),
+                       prior(cauchy(0, 2), class = "sigma")),
+             iter = 2000, chains = 4)
+)
+
+# Step 2: Extract Predictions and Confidence Intervals
+predictions_wildfire <- lapply(bayesian_models_wildfire, function(model) {
+  fitted_values <- fitted(model, summary = TRUE)
+  data.frame(
+    Prediction = fitted_values[, "Estimate"],
+    Lower = fitted_values[, "Q2.5"],
+    Upper = fitted_values[, "Q97.5"]
+  )
+})
+
+# Combine Predictions into a Table
+wildfire_results <- data.frame(
+  Prediction = sapply(predictions_wildfire, function(x) x$Prediction[1]),
+  Lower = sapply(predictions_wildfire, function(x) x$Lower[1]),
+  Upper = sapply(predictions_wildfire, function(x) x$Upper[1])
+)
+
+wildfire_results <- wildfire_results %>%
+  mutate(
+    Prediction = round(Prediction, 2),
+    Lower = round(Lower, 2),
+    Upper = round(Upper, 2)
+  )
+
+# Step 3: Display Results as a Table
+library(kableExtra)
+
+wildfire_results %>%
+  kbl(caption = "Wildfire Lineup - Points Thresholds with Confidence Intervals") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE) %>%
+  column_spec(2, bold = TRUE) # Optionally bold the interval columns
+
+```
+
