@@ -1,0 +1,143 @@
+---
+title: "GameBlazers"
+author: "Shyam Patel"
+date: "12/4/2024"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+projections_qb <- read_csv("~/Downloads/Projections Sheet - QB Wk17.csv")
+projections_rb <- read_csv("~/Downloads/Projections Sheet - RB Wk17.csv")
+projections_wr <- read_csv("~/Downloads/Projections Sheet - WR Wk17.csv")
+projections_te <- read_csv("~/Downloads/Projections Sheet - TE Wk17.csv")
+
+
+# Remove position and team info from the Player column using gsub
+
+projections_qb$Player <- gsub(" [A-Z]{2,3} [A-Z]{2,3}$", "", projections_qb$Player)
+projections_rb$Player <- gsub(" [A-Z]{2,3} [A-Z]{2,3}$", "", projections_rb$Player)
+projections_wr$Player <- gsub(" [A-Z]{2,3} [A-Z]{2,3}$", "", projections_wr$Player)
+projections_te$Player <- gsub(" [A-Z]{2,3} [A-Z]{2,3}$", "", projections_te$Player)
+
+```
+
+
+```{r}
+# Load necessary library
+library(dplyr)
+library(readr)
+
+# Import the CSV file
+roster <- read_csv("~/Downloads/playoff_roster.csv")
+
+# Select only the required columns
+filtered_roster <- roster %>%
+  select(player_name, position, multiplier, salary, status, team)
+
+# View the resulting dataframe
+head(filtered_roster)
+
+position_count <- filtered_roster %>%
+  group_by(position) %>%
+  summarise(count = n())
+
+# View the result
+print(position_count)
+
+```
+
+
+```{r}
+# List of teams that are on bye week (replace with actual team abbreviations)
+bye_teams <- c()
+
+# Add a column to indicate if the player's team is on a bye
+filtered_roster$on_bye <- ifelse(filtered_roster$team %in% bye_teams, TRUE, FALSE)
+
+```
+
+```{r}
+# Create a list for game windows with teams mapped to each window
+game_windows <- list(
+  "Wednesday" = c("KC", "HOU", "PIT", "BAL"),
+  "Thursday" = c("CHI", "SEA"),
+  "Saturday" = c("LAC", "NE", "LAR", "ARI", "CIN", "DEN"),
+  "Sunday Morning" = c("JAX", "TEN", "NYJ", "NO", "NYG", "CAR", "TB", "BUF", "IND", "LV", "MIN", "GB"),
+  "Sunday Afternoon" = c("MIA", "CLE", "DAL", "PHI"),
+  "Sunday Night" = c("ATL", "WAS"),
+  "Monday Night" = c("DET", "SF")
+)
+
+# Function to assign game window to each team
+assign_game_window <- function(team) {
+  for (window in names(game_windows)) {
+    if (team %in% game_windows[[window]]) {
+      return(window)
+    }
+  }
+  return(NA)
+}
+
+# Apply function to assign game window to each player based on their team
+filtered_roster$game_window <- sapply(filtered_roster$team, assign_game_window)
+
+# View updated dataframe
+print(filtered_roster)
+
+
+```
+
+
+```{r}
+filtered_active <- filtered_roster[filtered_roster$on_bye == FALSE, ]
+active_roster <- filtered_active %>% select(-on_bye)
+colnames(active_roster)[1] <- "Player"
+
+
+qb <- active_roster[active_roster$position == "QB", ]
+rb <- active_roster[active_roster$position == "RB", ]
+wr <- active_roster[active_roster$position == "WR", ]
+te <- active_roster[active_roster$position == "TE", ]
+
+```
+
+
+
+```{r}
+# Merge filtered roster with each position projection using player name
+# Assume 'Player' column exists in both data frames to match on
+active_qb <- active_roster %>%
+  filter(position == "QB") %>%
+  left_join(projections_qb, by = "Player")
+
+active_rb <- active_roster %>%
+  filter(position == "RB") %>%
+  left_join(projections_rb, by = "Player")
+
+active_wr <- active_roster %>%
+  filter(position == "WR") %>%
+  left_join(projections_wr, by = "Player")
+
+active_te <- active_roster %>%
+  filter(position == "TE") %>%
+  left_join(projections_te, by = "Player")
+
+
+# Combine all positions back into a single data frame
+combined_active_roster <- bind_rows(active_qb, active_rb, active_wr, active_te)
+new_active_roster <- combined_active_roster[, c(1:5, 7, 10, 17:21)]
+new_active_roster$GB_Projection <- new_active_roster$multiplier * new_active_roster$`3D Proj.`
+new_active_roster$GB_Projection_Floor <- new_active_roster$multiplier * new_active_roster$`Floor`
+new_active_roster$GB_Projection_Ceiling <- new_active_roster$multiplier * new_active_roster$`Ceiling`
+
+```
+
+```{r}
+# Optionally save the filtered data to a new CSV
+write.csv(new_active_roster, "active_roster_playoff.csv", row.names = FALSE)
+
+```
