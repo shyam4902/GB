@@ -16,3 +16,10 @@ This repository contains R Markdown files for analyzing fantasy football contest
 - Analyzes historical contest results.
 - Estimates how many points were needed to reach different payout tiers.
 - Currently includes past data and a small sample set but was still extremely accurate in making predictions.
+
+## 3. Lineup Optimizer (Website Build)
+- Initially developed as an R Markdown script but later transitioned into a website.
+- The website version allows for better interactivity and lineup optimization.
+
+👉 **The website build and additional Python code can be found here:**  
+🔗 [Fantasy Football Optimizer Website Repository](INSERT LINK)
