@@ -1,0 +1,6 @@
+player_name,team,position,multiplier,salary,status
+High QB,KC,QB,1.0,12000,Active
+Affordable QB,KC,QB,1.0,8000,Active
+Counter RB,KC,RB,1.0,8000,Active
+Counter WR,KC,WR,1.0,8000,Active
+Counter TE,KC,TE,1.0,8000,Active

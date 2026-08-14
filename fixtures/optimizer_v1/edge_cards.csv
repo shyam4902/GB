@@ -1,0 +1,11 @@
+player_name,team,position,multiplier,salary,status
+D.K. Metcalf,SEA,WR,1.0,6500,Active
+Deebo Samuel Sr.,SF,WR,1.2,7200,Active
+Variant Athlete,GB,WR,1.0,5000,Active
+Variant Athlete,GB,WR,1.3,6500,Active
+Exact Duplicate Athlete,KC,TE,1.0,4000,Active
+Exact Duplicate Athlete,KC,TE,1.0,4000,Active
+Zero Projection Athlete,NYJ,RB,1.0,4500,Active
+Missing Projection Athlete,DAL,RB,1.0,4500,Active
+Unmatched Athlete,BUF,WR,1.0,4500,Active
+Inactive Athlete,CHI,WR,1.0,4500,Injured Reserve

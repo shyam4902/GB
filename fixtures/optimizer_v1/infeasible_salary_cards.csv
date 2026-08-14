@@ -1,0 +1,5 @@
+player_name,team,position,multiplier,salary,status
+Expensive QB,KC,QB,1.0,12000,Active
+Expensive RB,KC,RB,1.0,8000,Active
+Expensive WR,KC,WR,1.0,8000,Active
+Expensive TE,KC,TE,1.0,8000,Active

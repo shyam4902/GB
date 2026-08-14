@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFS Optimizer</title>
+    <!-- Tailwind CSS for sleek styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PapaParse for reading the CSV files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-200 min-h-screen p-8 font-sans">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8 border-b border-slate-700 pb-4">
+            <h1 class="text-3xl font-bold text-emerald-400">DFS Optimizer</h1>
+            <p class="text-sm text-slate-400 mt-2">Adjust Max Salary below | Roster Size: 6 | Objective: Max Projected Points</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Controls & Exclusions -->
+            <div class="lg:col-span-1 space-y-6">
+                
+                <!-- File Uploads -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
+                    <h2 class="text-lg font-semibold text-white mb-4">1. Upload Files</h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Projections CSV</label>
+                        <input type="file" id="projFile" accept=".csv" class="block w-full text-sm text-slate-400
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-md file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-emerald-500 file:text-white
+                            hover:file:bg-emerald-600
+                        "/>
+                        <p id="projStatus" class="text-xs text-red-400 mt-1">Pending...</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Roster CSV</label>
+                        <input type="file" id="rosterFile" accept=".csv" class="block w-full text-sm text-slate-400
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-md file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-emerald-500 file:text-white
+                            hover:file:bg-emerald-600
+                        "/>
+                        <p id="rosterStatus" class="text-xs text-red-400 mt-1">Pending...</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-400 mb-2">Max Salary Cap</label>
+                        <input type="number" id="maxSalaryInput" value="64000" step="1000" class="block w-full text-sm text-slate-200 bg-slate-900 border border-slate-700 rounded-md py-2 px-3 focus:outline-none focus:border-emerald-500"/>
+                    </div>
+
+                    <button id="optimizeBtn" disabled class="w-full mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        Generate Optimal Lineup
+                    </button>
+                </div>
+
+                <!-- Exclusions List -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold text-white">Excluded Players</h2>
+                        <span id="excludeCount" class="text-xs font-bold bg-slate-700 px-2 py-1 rounded-full">0</span>
+                    </div>
+                    <ul id="excludedList" class="space-y-2 text-sm max-h-[300px] overflow-y-auto pr-2">
+                        <li class="text-slate-500 italic">No players excluded.</li>
+                    </ul>
+                </div>
+                
+                <button id="clearExclusionsBtn" class="w-full bg-slate-700 hover:bg-slate-600 text-white text-sm py-2 px-4 rounded-lg transition-colors hidden">
+                    Clear All Exclusions
+                </button>
+            </div>
+
+            <!-- Right Column: Results -->
+            <div class="lg:col-span-2">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg h-full">
+                    <h2 class="text-xl font-bold text-white mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        Optimal Lineup
+                        <div class="flex flex-wrap gap-4 text-sm font-normal">
+                            <span class="bg-slate-900 px-3 py-1 rounded-md border border-slate-700">Salary Used: <span id="totalSalary" class="font-mono text-emerald-400">$0</span></span>
+                            <span class="bg-slate-900 px-3 py-1 rounded-md border border-slate-700">Proj Pts: <span id="totalPoints" class="font-mono text-emerald-400">0.00</span></span>
+                            <span class="bg-slate-900 px-3 py-1 rounded-md border border-slate-700 flex items-center gap-2">
+                                Viability: <span id="viabilityPct" class="font-mono font-bold text-emerald-400">0.0%</span> 
+                                <span class="text-xs text-slate-500">(Max: <span id="absoluteMaxPoints">0.00</span>)</span>
+                            </span>
+                        </div>
+                    </h2>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-900 text-slate-400">
+                                <tr>
+                                    <th class="py-3 px-4 rounded-tl-lg">Player</th>
+                                    <th class="py-3 px-4">Mult</th>
+                                    <th class="py-3 px-4">Salary</th>
+                                    <th class="py-3 px-4">Base Proj</th>
+                                    <th class="py-3 px-4">Total Proj</th>
+                                    <th class="py-3 px-4 rounded-tr-lg">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lineupBody" class="divide-y divide-slate-700">
+                                <tr>
+                                    <td colspan="6" class="py-8 text-center text-slate-500">
+                                        Upload your files and click Optimize to generate a lineup.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State variables
+        let projData = [];
+        let rosterData = [];
+        let mergedPool = [];
+        let excludedCards = new Set(); 
+        let cardMap = {}; 
+        let absoluteMaxCache = {}; // Cache to store the absolute max for different salary caps
+        
+        // Dictionary to map tricky names
+        const nameMap = {
+            'Alexander Noren': 'Alex Noren',
+            'Christopher Gotterup': 'Chris Gotterup',
+            'Matt McCarty': 'Matthew McCarty'
+        };
+
+        // DOM Elements
+        const projFile = document.getElementById('projFile');
+        const rosterFile = document.getElementById('rosterFile');
+        const projStatus = document.getElementById('projStatus');
+        const rosterStatus = document.getElementById('rosterStatus');
+        const optimizeBtn = document.getElementById('optimizeBtn');
+        const lineupBody = document.getElementById('lineupBody');
+        const totalSalaryEl = document.getElementById('totalSalary');
+        const totalPointsEl = document.getElementById('totalPoints');
+        const excludedList = document.getElementById('excludedList');
+        const excludeCount = document.getElementById('excludeCount');
+        const clearExclusionsBtn = document.getElementById('clearExclusionsBtn');
+        const maxSalaryInput = document.getElementById('maxSalaryInput');
+
+        // File Upload Handlers
+        projFile.addEventListener('change', (e) => parseCSV(e.target.files[0], 'proj'));
+        rosterFile.addEventListener('change', (e) => parseCSV(e.target.files[0], 'roster'));
+        
+        maxSalaryInput.addEventListener('change', () => {
+            if (mergedPool.length > 0) optimizeLineup();
+        });
+
+        optimizeBtn.addEventListener('click', optimizeLineup);
+        clearExclusionsBtn.addEventListener('click', () => {
+            excludedCards.clear();
+            updateExcludedUI();
+            if (mergedPool.length > 0) optimizeLineup();
+        });
+
+        function parseCSV(file, type) {
+            if (!file) return;
+            
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (type === 'proj') {
+                        projData = results.data;
+                        projStatus.textContent = `Loaded ${projData.length} projections`;
+                        projStatus.className = "text-xs text-emerald-400 mt-1";
+                    } else {
+                        rosterData = results.data;
+                        rosterStatus.textContent = `Loaded ${rosterData.length} roster cards`;
+                        rosterStatus.className = "text-xs text-emerald-400 mt-1";
+                    }
+                    
+                    if (projData.length > 0 && rosterData.length > 0) {
+                        prepareData();
+                        optimizeBtn.disabled = false;
+                    }
+                }
+            });
+        }
+
+        function prepareData() {
+            // Build a fast lookup for projections by Name
+            const projMap = {};
+            projData.forEach(p => {
+                // Ensure columns exist
+                if(p['First Name'] && p['Lastname']) {
+                    const fullName = (p['First Name'] + " " + p['Lastname']).trim();
+                    projMap[fullName] = parseFloat(p['proj.']) || 0;
+                }
+            });
+
+            mergedPool = [];
+            cardMap = {}; 
+            absoluteMaxCache = {}; // Reset the theoretical max cache on new uploads
+            excludedCards.clear(); 
+            updateExcludedUI();
+            
+            rosterData.forEach((r, idx) => {
+                const rosterName = r['Player'];
+                const mappedName = nameMap[rosterName] || rosterName;
+                
+                const baseProj = projMap[mappedName];
+                
+                if (baseProj !== undefined) {
+                    const multiplier = parseFloat(r['Multiplier']) || 1;
+                    const salary = parseInt(r['Salary']) || 0;
+                    
+                    const playerObj = {
+                        id: `p_${idx}`,
+                        originalName: rosterName,
+                        mappedName: mappedName,
+                        multiplier: multiplier,
+                        salary: salary,
+                        baseProj: baseProj,
+                        totalProj: baseProj * multiplier
+                    };
+                    
+                    mergedPool.push(playerObj);
+                    cardMap[playerObj.id] = playerObj;
+                }
+            });
+            console.log(`Merged ${mergedPool.length} valid player/multiplier combos.`);
+        }
+
+        // Extremely fast DP Knapsack algorithm to calculate absolute perfect ceiling projection 
+        // across the entire projections pool + all available multipliers.
+        function calculateAbsoluteMaxDP(cap) {
+            if (!projData.length || !rosterData.length) return 0;
+
+            const multipliers = new Set([1.0]);
+            rosterData.forEach(r => {
+                const m = parseFloat(r['Multiplier']);
+                if (!isNaN(m)) multipliers.add(m);
+            });
+            const multArray = Array.from(multipliers);
+
+            const players = projData.map(p => {
+                const baseProj = parseFloat(p['proj.']);
+                const baseSalStr = p['salary(1.0'];
+                if (!baseProj || !baseSalStr) return null;
+                const baseSal = parseInt(baseSalStr.replace(/[^0-9.-]+/g,""));
+                
+                const variants = [];
+                multArray.forEach(m => {
+                    variants.push({
+                        salary: Math.round(baseSal * m),
+                        proj: baseProj * m
+                    });
+                });
+                return variants;
+            }).filter(p => p !== null);
+
+            // dp[playerCount][salary] = maxPoints
+            const dp = Array.from({length: 7}, () => new Float64Array(cap + 1).fill(-1));
+            dp[0][0] = 0;
+            const maxReachable = [0, -1, -1, -1, -1, -1, -1];
+
+            for (const variants of players) {
+                // Iterate backwards to enforce picking max 1 variant per player
+                for (let c = 6; c >= 1; c--) {
+                    const prevMax = maxReachable[c-1];
+                    if (prevMax === -1) continue;
+                    
+                    let currMax = maxReachable[c];
+
+                    for (let s = 0; s <= prevMax; s++) {
+                        const prevPoints = dp[c-1][s];
+                        if (prevPoints === -1) continue;
+
+                        for (let i = 0; i < variants.length; i++) {
+                            const v = variants[i];
+                            const newSal = s + v.salary;
+                            if (newSal <= cap) {
+                                const newPoints = prevPoints + v.proj;
+                                if (newPoints > dp[c][newSal]) {
+                                    dp[c][newSal] = newPoints;
+                                }
+                                if (newSal > currMax) {
+                                    currMax = newSal;
+                                }
+                            }
+                        }
+                    }
+                    maxReachable[c] = currMax;
+                }
+            }
+
+            let maxPoints = 0;
+            for (let s = 0; s <= cap; s++) {
+                if (dp[6][s] > maxPoints) {
+                    maxPoints = dp[6][s];
+                }
+            }
+            return maxPoints;
+        }
+
+        function getAbsoluteMax(cap) {
+            if (absoluteMaxCache[cap] !== undefined) return absoluteMaxCache[cap];
+            const max = calculateAbsoluteMaxDP(cap);
+            absoluteMaxCache[cap] = max;
+            return max;
+        }
+
+        function optimizeLineup() {
+            if (mergedPool.length === 0) return;
+
+            // Group players by original name (to enforce max 1 per player)
+            const groupsMap = {};
+            mergedPool.forEach(p => {
+                if (excludedCards.has(p.id)) return; 
+                if (!groupsMap[p.originalName]) groupsMap[p.originalName] = [];
+                groupsMap[p.originalName].push(p);
+            });
+
+            const groups = Object.values(groupsMap);
+            
+            // Sort items within each group by points descending
+            groups.forEach(g => g.sort((a, b) => b.totalProj - a.totalProj));
+            
+            // Sort groups based on their highest projected option descending
+            groups.sort((a, b) => b[0].totalProj - a[0].totalProj);
+
+            const currentMaxSalary = parseInt(maxSalaryInput.value) || 64000;
+            let maxPoints = -1;
+            let bestLineup = null;
+
+            // Custom backtracking algorithm to find the exact optimal lineup natively from YOUR ROSTER
+            function backtrack(groupIndex, currentCount, currentSalary, currentPoints, currentLineup) {
+                if (currentCount === 6) {
+                    if (currentPoints > maxPoints) {
+                        maxPoints = currentPoints;
+                        bestLineup = [...currentLineup];
+                    }
+                    return;
+                }
+
+                let remainingNeeded = 6 - currentCount;
+                if (groups.length - groupIndex < remainingNeeded) return;
+
+                // Pruning Bound: Check if it's mathematically possible to beat maxPoints
+                let optimisticPoints = currentPoints;
+                for (let i = 0; i < remainingNeeded; i++) {
+                    optimisticPoints += groups[groupIndex + i][0].totalProj;
+                }
+                if (optimisticPoints <= maxPoints) return;
+
+                // Branch 1: Try picking an option from the current group
+                for (const player of groups[groupIndex]) {
+                    if (currentSalary + player.salary <= currentMaxSalary) {
+                        currentLineup.push(player);
+                        backtrack(groupIndex + 1, currentCount + 1, currentSalary + player.salary, currentPoints + player.totalProj, currentLineup);
+                        currentLineup.pop();
+                    }
+                }
+
+                // Branch 2: Try skipping this group entirely
+                backtrack(groupIndex + 1, currentCount, currentSalary, currentPoints, currentLineup);
+            }
+
+            backtrack(0, 0, 0, 0, []);
+            
+            if (bestLineup) {
+                displayResults(bestLineup);
+            } else {
+                const absMax = getAbsoluteMax(currentMaxSalary);
+                lineupBody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-400 font-bold">Optimization failed! Could not find a valid 6-player lineup under $${currentMaxSalary.toLocaleString()} with the remaining pool.</td></tr>`;
+                totalSalaryEl.textContent = "$0";
+                totalPointsEl.textContent = "0.00";
+                
+                document.getElementById('absoluteMaxPoints').textContent = absMax.toFixed(2);
+                document.getElementById('viabilityPct').textContent = "0.0%";
+                document.getElementById('viabilityPct').className = "font-mono font-bold text-slate-500";
+            }
+        }
+
+        function displayResults(lineup) {
+            let selectedHtml = '';
+            let tSalary = 0;
+            let tPts = 0;
+
+            // Sort by Salary descending
+            lineup.sort((a, b) => b.salary - a.salary);
+
+            lineup.forEach(p => {
+                tSalary += p.salary;
+                tPts += p.totalProj;
+                selectedHtml += `
+                    <tr class="hover:bg-slate-800 transition-colors">
+                        <td class="py-3 px-4 font-semibold text-white">${p.originalName}</td>
+                        <td class="py-3 px-4">${p.multiplier}x</td>
+                        <td class="py-3 px-4 font-mono">$${p.salary.toLocaleString()}</td>
+                        <td class="py-3 px-4">${p.baseProj.toFixed(1)}</td>
+                        <td class="py-3 px-4 font-bold text-emerald-400">${p.totalProj.toFixed(2)}</td>
+                        <td class="py-3 px-4">
+                            <button onclick="excludePlayer('${p.id}')" class="bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white px-3 py-1 rounded-md text-xs transition-colors border border-red-500/20">
+                                Exclude Card
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            lineupBody.innerHTML = selectedHtml;
+            totalSalaryEl.textContent = `$${tSalary.toLocaleString()}`;
+            totalPointsEl.textContent = tPts.toFixed(2);
+
+            // Calculate and display viability metric
+            const currentMaxSalary = parseInt(maxSalaryInput.value) || 64000;
+            const absMax = getAbsoluteMax(currentMaxSalary);
+            const viability = absMax > 0 ? ((tPts / absMax) * 100).toFixed(1) : "0.0";
+            
+            document.getElementById('absoluteMaxPoints').textContent = absMax.toFixed(2);
+            
+            const viabilityEl = document.getElementById('viabilityPct');
+            viabilityEl.textContent = viability + '%';
+            
+            // Color code the viability percentage
+            if (viability >= 90) {
+                viabilityEl.className = "font-mono font-bold text-emerald-400";
+            } else if (viability >= 80) {
+                viabilityEl.className = "font-mono font-bold text-yellow-400";
+            } else {
+                viabilityEl.className = "font-mono font-bold text-red-400";
+            }
+        }
+
+        // Global functions for inline HTML event handlers
+        window.excludePlayer = function(id) {
+            excludedCards.add(id);
+            updateExcludedUI();
+            optimizeLineup();
+        }
+
+        window.includePlayer = function(id) {
+            excludedCards.delete(id);
+            updateExcludedUI();
+            optimizeLineup();
+        }
+
+        function updateExcludedUI() {
+            excludeCount.textContent = excludedCards.size;
+            
+            if (excludedCards.size === 0) {
+                excludedList.innerHTML = '<li class="text-slate-500 italic">No cards excluded.</li>';
+                clearExclusionsBtn.classList.add('hidden');
+                return;
+            }
+
+            clearExclusionsBtn.classList.remove('hidden');
+            let html = '';
+            Array.from(excludedCards).forEach(id => {
+                const p = cardMap[id];
+                if (!p) return;
+                html += `
+                    <li class="flex justify-between items-center bg-slate-900 px-3 py-2 rounded-md border border-slate-700">
+                        <span>${p.originalName} <span class="text-slate-400 text-xs">(${p.multiplier}x)</span></span>
+                        <button onclick="includePlayer('${id}')" class="text-slate-400 hover:text-emerald-400 text-xs font-bold transition-colors">
+                            &times; Add Back
+                        </button>
+                    </li>
+                `;
+            });
+            excludedList.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

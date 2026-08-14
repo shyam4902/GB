@@ -1,0 +1,7 @@
+player_name,team,position,multiplier,salary,status
+Flex QB,KC,QB,1.0,6000,Active
+Flex RB One,KC,RB,1.0,5000,Active
+Flex RB Two,KC,RB,1.0,5000,Active
+Flex WR One,KC,WR,1.0,5000,Active
+Flex WR Two,KC,WR,1.0,5000,Active
+Flex TE One,KC,TE,1.0,5000,Active

@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local marketplace data and backups are not safe for the public repository.
+market_py/*.db
+market_py/backups/

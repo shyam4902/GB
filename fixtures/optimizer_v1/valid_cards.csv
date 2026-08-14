@@ -1,0 +1,17 @@
+player_name,team,position,multiplier,salary,status
+Patrick Mahomes,KC,QB,1.0,8000,Active
+Josh Allen,BUF,QB,1.0,8000,Active
+Josh Allen,BUF,QB,1.1,8800,Active
+C.J. Stroud,HOU,QB,1.0,6500,Active
+Bijan Robinson,ATL,RB,1.0,7000,Active
+Derrick Henry,BAL,RB,1.0,8000,Active
+Chuba Hubbard,CAR,RB,1.0,6000,Active
+Chuba Hubbard,CAR,RB,1.2,7200,Active
+Jonathan Taylor,IND,RB,1.0,6500,Active
+Ja'Marr Chase,CIN,WR,1.0,8500,Active
+Justin Jefferson,MIN,WR,1.0,8500,Active
+D.K. Metcalf,SEA,WR,1.0,6500,Active
+A.J. Brown,PHI,WR,1.0,7500,Active
+Travis Kelce,KC,TE,1.0,7000,Active
+George Kittle,SF,TE,1.0,6500,Active
+George Kittle,SF,TE,1.0,6500,Active
