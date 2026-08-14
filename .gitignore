@@ -6,3 +6,5 @@ __pycache__/
 # Local marketplace data and backups are not safe for the public repository.
 market_py/*.db
 market_py/backups/
+market_py/logs/
+market_py/*.checkpoint.json
