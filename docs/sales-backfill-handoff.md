@@ -152,3 +152,89 @@ The task is complete when:
 - the hourly job can be started and stopped with documented commands;
 - tests and the existing self-test pass;
 - code and documentation are committed to a new `codex/` branch and pushed to the existing `shyam4902/GB` repository as a draft PR.
+
+## Operator runbook
+
+All commands below use the main `GB` repository. The default incremental command is unchanged. Backfill work requires the explicit `--backfill` flag.
+
+### Check the database and checkpoint without a request
+
+```sh
+cd /Users/shyampatel/Desktop/GB
+/usr/bin/python3 market_py/update.py --integrity-check
+/usr/bin/python3 market_py/update.py --status
+```
+
+The checkpoint is `market_py/gameblazers.backfill.checkpoint.json`. It contains only the exact next page. Set or reset it without a network request:
+
+```sh
+/usr/bin/python3 /Users/shyampatel/Desktop/GB/market_py/update.py --set-checkpoint 25
+/usr/bin/python3 /Users/shyampatel/Desktop/GB/market_py/update.py --reset-checkpoint
+```
+
+### Back up and run one page manually
+
+Create and verify a timestamped SQLite backup:
+
+```sh
+/usr/bin/python3 /Users/shyampatel/Desktop/GB/market_py/update.py --backup
+```
+
+The first backfill invocation also creates a verified `backfill-initial` backup automatically, even if the checkpoint was set by hand. Every backfill invocation runs SQLite integrity checks before and after the page transaction.
+
+Load the token into the current shell without putting its value in shell history, then fetch one page:
+
+```sh
+read -rs 'GB_ACCESS_TOKEN?GameBlazers access token: '
+export GB_ACCESS_TOKEN
+printf '\n'
+/usr/bin/python3 /Users/shyampatel/Desktop/GB/market_py/update.py --backfill
+unset GB_ACCESS_TOKEN
+```
+
+Use `--start-page 25` for one explicit page. `--backfill-pages` defaults to `1`; the scheduled job does not override it.
+
+### Install the disabled user agent
+
+The checked-in plist has `Disabled` set to true and contains no token. Install it under the current user's LaunchAgents directory:
+
+```sh
+/bin/mkdir -p /Users/shyampatel/Desktop/GB/market_py/logs
+/bin/cp /Users/shyampatel/Desktop/GB/market_py/com.gameblazers.sales-backfill.plist.example /Users/shyampatel/Library/LaunchAgents/com.gameblazers.sales-backfill.plist
+/usr/bin/plutil -lint /Users/shyampatel/Library/LaunchAgents/com.gameblazers.sales-backfill.plist
+/bin/launchctl disable gui/$(/usr/bin/id -u)/com.gameblazers.sales-backfill
+/bin/launchctl bootstrap gui/$(/usr/bin/id -u) /Users/shyampatel/Library/LaunchAgents/com.gameblazers.sales-backfill.plist
+```
+
+Keep it disabled unless the job has a durable token source that exports `GB_ACCESS_TOKEN` without placing the token in the plist, a repository file, or a log. This repository does not add token storage or refresh automation. Once such a source exists, load and start the hourly job with:
+
+```sh
+/bin/launchctl enable gui/$(/usr/bin/id -u)/com.gameblazers.sales-backfill
+/bin/launchctl kickstart -k gui/$(/usr/bin/id -u)/com.gameblazers.sales-backfill
+```
+
+Stop and unload it with:
+
+```sh
+/bin/launchctl disable gui/$(/usr/bin/id -u)/com.gameblazers.sales-backfill
+/bin/launchctl bootout gui/$(/usr/bin/id -u)/com.gameblazers.sales-backfill
+```
+
+Inspect the logs and checkpoint:
+
+```sh
+/usr/bin/tail -n 50 /Users/shyampatel/Desktop/GB/market_py/logs/sales-backfill.log
+/usr/bin/tail -n 50 /Users/shyampatel/Desktop/GB/market_py/logs/sales-backfill.err.log
+/usr/bin/python3 /Users/shyampatel/Desktop/GB/market_py/update.py --status
+```
+
+### Restore a backup
+
+Stop the collector first. Replace the placeholder with one file reported by `--backup`:
+
+```sh
+BACKUP_DB=/Users/shyampatel/Desktop/GB/market_py/backups/gameblazers-YYYYMMDDTHHMMSSffffffZ.db
+/usr/bin/sqlite3 "$BACKUP_DB" 'PRAGMA integrity_check;'
+/bin/cp -p "$BACKUP_DB" /Users/shyampatel/Desktop/GB/market_py/gameblazers.db
+/usr/bin/python3 /Users/shyampatel/Desktop/GB/market_py/update.py --integrity-check
+```
