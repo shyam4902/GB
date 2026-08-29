@@ -7,4 +7,5 @@ __pycache__/
 market_py/*.db
 market_py/backups/
 market_py/logs/
-market_py/*.checkpoint.json
+market_py/*.checkpoint.json*
+market_py/*.lock
